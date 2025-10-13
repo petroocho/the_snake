@@ -60,13 +60,6 @@ class GameObject:
         position_x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
         position_y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
         self.position = (position_x, position_y)
-        # while True:
-        #     position_x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
-        #     position_y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
-        #     object_position = (position_x, position_y)
-        #     if object_position not in snake_position:
-        #         self.position = object_position
-        #         break
 
     def draw(self):
         """Отрисовка камнtq на игровом поле"""
@@ -82,16 +75,6 @@ class Apple(GameObject):
         super().__init__()
         self.body_color = APPLE_COLOR
         self.randomize_position()
-    # def randomize_position(self):
-    #     position_x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
-    #     position_y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
-    #     self.position = (position_x, position_y)
-
-    # def draw(self):
-    #     """Метод отрисовывает яблочко на игровом поле"""
-    #     rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
-    #     pygame.draw.rect(screen, self.body_color, rect)
-    #     pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
 
 
 class Stone(GameObject):
@@ -239,18 +222,18 @@ def main():
         snake.draw()
         apple.draw()
 
-        for object in objects:
-            object.draw()
-            if snake.get_head_position() == object.position:
-                if object.type == 'stone':
+        for booster in objects:
+            booster.draw()
+            if snake.get_head_position() == booster.position:
+                if booster.type == 'stone':
                     pygame.time.delay(600)
                     snake.reset()
                     objects.clear()
                     apple.randomize_position()
                     objects_spawn = 0
-                if object.type == 'booster':
+                if booster.type == 'booster':
                     snake.length += 2
-                    objects.remove(object)
+                    objects.remove(booster)
 
         pygame.display.update()
         clock.tick(SPEED)
@@ -258,53 +241,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# Метод draw класса Apple
-# def draw(self):
-#     rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
-#     pygame.draw.rect(screen, self.body_color, rect)
-#     pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
-
-# # Метод draw класса Snake
-# def draw(self):
-#     for position in self.positions[:-1]:
-#         rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
-#         pygame.draw.rect(screen, self.body_color, rect)
-#         pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
-
-#     # Отрисовка головы змейки
-#     head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
-#     pygame.draw.rect(screen, self.body_color, head_rect)
-#     pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
-
-#     # Затирание последнего сегмента
-#     if self.last:
-#         last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
-#         pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
-
-# Функция обработки действий пользователя
-# def handle_keys(game_object):
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             pygame.quit()
-#             raise SystemExit
-#         elif event.type == pygame.KEYDOWN:
-#             if event.key == pygame.K_UP and game_object.direction != DOWN:
-#                 game_object.next_direction = UP
-#             elif event.key == pygame.K_DOWN and game_object.direction != UP:
-#                 game_object.next_direction = DOWN
-#             elif (
-#                 event.key == pygame.K_LEFT and game_object.direction != RIGHT
-#             ):
-#                 game_object.next_direction = LEFT
-#             elif (
-#                 event.key == pygame.K_RIGHT and game_object.direction != LEFT
-#             ):
-#                 game_object.next_direction = RIGHT
-
-# Метод обновления направления после нажатия на кнопку
-# def update_direction(self):
-#     if self.next_direction:
-#         self.direction = self.next_direction
-#         self.next_direction = None

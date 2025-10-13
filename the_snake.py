@@ -186,6 +186,18 @@ def handle_keys(game_object):
                 game_object.next_direction = RIGHT
 
 
+def boosters_generate(snake, objects, objects_spawn):
+    """Рандомное появление камней и бустеров на поле"""
+    if len(snake.positions) // 3 > objects_spawn:
+        new_object = choice([Stone(), Booster()])
+        new_object.randomize_position()
+        while new_object.position in snake.positions:
+            new_object.randomize_position()
+        objects.append(new_object)
+        objects_spawn += 1
+    return objects_spawn
+
+
 def main():
     """Вся логика игры"""
     # Инициализация PyGame:
@@ -200,15 +212,7 @@ def main():
     # Цикл игры.
     while True:
         SPEED = 5 + len(snake.positions) // 5  # Увеличение скорости змейки.
-
-        if len(snake.positions) // 3 > objects_spawn:
-            new_object = choice([Stone(), Booster()])
-            new_object.randomize_position()
-            while new_object.position in snake.position:
-                new_object.randomize_position()
-            objects.append(new_object)
-            objects_spawn += 1
-
+        objects_spawn = boosters_generate(snake, objects, objects_spawn)
         handle_keys(snake)
         snake.update_direction()
         snake.move()

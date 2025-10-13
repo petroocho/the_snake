@@ -32,9 +32,6 @@ BOOSTER_COLOR = (255, 255, 0)
 # Цвет змейки
 SNAKE_COLOR = (0, 255, 0)
 
-# Скорость движения змейки:
-# SPEED = 20
-
 # Настройка игрового окна:
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 

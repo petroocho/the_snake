@@ -72,15 +72,19 @@ class GameObject:
         raise NotImplementedError('Метод draw() должен быть переопределён.')
 
 
-class GenerateObjects(GameObject):
+class Apple(GameObject):
     """Отрисовка объектов в зависимости от цвета."""
 
-    def __init__(self, body_color, snake_positions):
+    def __init__(self, body_color=APPLE_COLOR, snake_positions=None):
         super().__init__(body_color)
         self.randomize_position(snake_positions)
 
     def randomize_position(self, snake_positions):
         """Рандомное появление на игровом поле (Apple, Stone, Booster)."""
+
+        if snake_positions is None:
+            snake_positions = []
+
         while True:
             position_x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
             position_y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
@@ -169,11 +173,11 @@ def main():
     # Создаем объекты классов на игровом поле.
     snake = Snake()
     occupied_cells = list(snake.positions)
-    apple = GenerateObjects(APPLE_COLOR, occupied_cells)
+    apple = Apple(APPLE_COLOR, occupied_cells)
     occupied_cells.append(apple.position)
-    stone = GenerateObjects(STONE_COLOR, occupied_cells)
+    stone = Apple(STONE_COLOR, occupied_cells)
     occupied_cells.append(stone.position)
-    booster = GenerateObjects(BOOSTER_COLOR, occupied_cells)
+    booster = Apple(BOOSTER_COLOR, occupied_cells)
     occupied_cells.append(booster.position)
 
     just_reset = False  # Флаг не оставляет блок змейки после сброса.

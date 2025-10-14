@@ -81,7 +81,6 @@ class Apple(GameObject):
 
     def randomize_position(self, snake_positions):
         """Рандомное появление на игровом поле (Apple, Stone, Booster)."""
-
         if snake_positions is None:
             snake_positions = []
 

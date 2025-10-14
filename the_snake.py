@@ -69,7 +69,7 @@ class GameObject:
 
         Должен быть переопределен в дочерних классах.
         """
-        raise NotImplementedError("Метод draw() должен быть переопределён.")
+        raise NotImplementedError('Метод draw() должен быть переопределён.')
 
 
 class GenerateObjects(GameObject):
@@ -167,9 +167,8 @@ def main():
     # Инициализация pg:
     pg.init()
     # Создаем объекты классов на игровом поле.
-    occupied_cells = []
     snake = Snake()
-    occupied_cells.extend(snake.positions)
+    occupied_cells = list(snake.positions)
     apple = GenerateObjects(APPLE_COLOR, occupied_cells)
     occupied_cells.append(apple.position)
     stone = GenerateObjects(STONE_COLOR, occupied_cells)

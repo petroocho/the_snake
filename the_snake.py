@@ -169,11 +169,20 @@ def main():
     snake = Snake()
     occupied_cells = list(snake.positions)
     apple = Apple(APPLE_COLOR, occupied_cells)
-    occupied_cells.append(apple.position)
     stone = Apple(STONE_COLOR, occupied_cells)
-    occupied_cells.append(stone.position)
     booster = Apple(BOOSTER_COLOR, occupied_cells)
-    occupied_cells.append(booster.position)
+
+    def reset_game():
+        snake.reset()
+        occupied_cells = list(snake.positions)
+        apple.randomize_position(occupied_cells)
+        occupied_cells.append(apple.position)
+        stone.randomize_position(occupied_cells)
+        occupied_cells.append(stone.position)
+        booster.randomize_position(occupied_cells)
+        occupied_cells.append(booster.position)
+        return occupied_cells
+    occupied_cells = reset_game()
 
     # Цикл игры.
     while True:
@@ -206,14 +215,7 @@ def main():
             or snake.get_head_position() == stone.position
         ):
             screen.fill(BOARD_BACKGROUND_COLOR)
-            snake.reset()
-            occupied_cells = list(snake.positions)
-            apple.randomize_position(occupied_cells)
-            occupied_cells.append(apple.position)
-            stone.randomize_position(occupied_cells)
-            occupied_cells.append(stone.position)
-            booster.randomize_position(occupied_cells)
-            occupied_cells.append(booster.position)
+            occupied_cells = reset_game()
             continue
 
         snake.draw()

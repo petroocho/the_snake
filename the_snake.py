@@ -51,11 +51,9 @@ clock = pg.time.Clock()
 class GameObject:
     """Родительский класс."""
 
-    def __init__(self, body_color=None, snake_positions=None) -> None:
+    def __init__(self, body_color=None) -> None:
         self.position = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
         self.body_color = body_color
-        if snake_positions is None:
-            snake_positions = []
 
     def draw_cell(self, position, fill_color, border_color=None):
         """Рисует объекты с переданными параметрами."""
@@ -75,20 +73,18 @@ class GameObject:
 class Apple(GameObject):
     """Отрисовка объектов в зависимости от цвета."""
 
-    def __init__(self, body_color=APPLE_COLOR, snake_positions=None):
+    def __init__(self, body_color=APPLE_COLOR, occupied_cells=None):
         super().__init__(body_color)
-        self.randomize_position(snake_positions)
+        self.randomize_position(occupied_cells or [])
 
-    def randomize_position(self, snake_positions):
+    def randomize_position(self, occupied_cells):
         """Рандомное появление на игровом поле (Apple, Stone, Booster)."""
-        if snake_positions is None:
-            snake_positions = []
-
         while True:
-            position_x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
-            position_y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
-            if (position_x, position_y) not in snake_positions:
-                self.position = (position_x, position_y)
+            self.position = (
+                randint(0, GRID_WIDTH - 1) * GRID_SIZE,
+                randint(0, GRID_HEIGHT - 1) * GRID_SIZE
+            )
+            if self.position not in occupied_cells:
                 break
 
     def draw(self):
@@ -99,10 +95,10 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Поведение змейки на игровом поле."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, body_color=SNAKE_COLOR):
+        super().__init__(body_color)
         self.reset()
-        self.body_color = SNAKE_COLOR
+        self.direction = RIGHT
 
     def update_direction(self, direction):
         """Обновление направления змейки после нажатия на кнопку."""
@@ -179,48 +175,48 @@ def main():
     booster = Apple(BOOSTER_COLOR, occupied_cells)
     occupied_cells.append(booster.position)
 
-    just_reset = False  # Флаг не оставляет блок змейки после сброса.
     # Цикл игры.
     while True:
         handle_keys(snake)
         snake.move()
-        occupied_cells = (
-            snake.positions
-            + [apple.position, stone.position, booster.position]
-        )
         # Нарастание змейки при столкновении с яблочком.
         if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.randomize_position(occupied_cells)
+            occupied_cells.append(apple.position)
             if snake.length % 3 == 0:
                 new_object = choice([stone, booster])
                 if new_object == stone:
                     stone.randomize_position(occupied_cells)
+                    occupied_cells.append(stone.position)
                     stone.draw()
                 else:
                     booster.randomize_position(occupied_cells)
+                    occupied_cells.append(booster.position)
                     booster.draw()
 
         elif snake.get_head_position() == booster.position:
             snake.length += 2
             booster.randomize_position(occupied_cells)
+            occupied_cells.append(booster.position)
 
         # Если змейка коснулась своего тела игра сбрасывается
         elif (
-            snake.get_head_position() in snake.positions[1:]
+            snake.get_head_position() in snake.positions[4:]
             or snake.get_head_position() == stone.position
         ):
             screen.fill(BOARD_BACKGROUND_COLOR)
             snake.reset()
+            occupied_cells = list(snake.positions)
             apple.randomize_position(occupied_cells)
+            occupied_cells.append(apple.position)
             stone.randomize_position(occupied_cells)
+            occupied_cells.append(stone.position)
             booster.randomize_position(occupied_cells)
-            just_reset = True
-        else:
-            just_reset = False
+            occupied_cells.append(booster.position)
+            continue
 
-        if not just_reset:
-            snake.draw()
+        snake.draw()
         apple.draw()
 
         pg.display.update()

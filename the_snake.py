@@ -168,12 +168,12 @@ def main():
     # Создаем объекты классов на игровом поле.
     snake = Snake()
     occupied_cells = list(snake.positions)
+
     apple = Apple(APPLE_COLOR, occupied_cells)
     stone = Apple(STONE_COLOR, occupied_cells)
     booster = Apple(BOOSTER_COLOR, occupied_cells)
 
     def reset_game():
-        snake.reset()
         occupied_cells = list(snake.positions)
         apple.randomize_position(occupied_cells)
         occupied_cells.append(apple.position)
@@ -215,6 +215,7 @@ def main():
             or snake.get_head_position() == stone.position
         ):
             screen.fill(BOARD_BACKGROUND_COLOR)
+            snake.reset()
             occupied_cells = reset_game()
             continue
 

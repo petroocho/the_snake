@@ -21,7 +21,7 @@ BOARD_BACKGROUND_COLOR = (0, 0, 0)
 BORDER_COLOR = (93, 216, 228)
 
 # Цвет яблока
-APPLE_COLOR = (255, 0, 0)
+APPLE_COLOR = (254, 0, 0)
 
 # Цвет камня
 STONE_COLOR = (255, 255, 255)
